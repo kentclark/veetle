@@ -19,7 +19,10 @@ class getchannels(HTMLParser):
 		if tag == 'h2':
 			self.h2.append(attrs)
 		if tag == 'a' and self.h2 and not self.a and [('class','grid')] in self.div:
-			self.result.append( ['', dict(attrs)['href']] )
+			try:
+				cid = dict(attrs)['href'].split('cid=')[1]
+				self.result.append( ['', cid] )
+			except (KeyError, IndexError): pass
 			self.a.append(attrs)
 	def handle_endtag(self, tag):
 		if tag == 'div':
@@ -32,4 +35,10 @@ class getchannels(HTMLParser):
 			title = data.strip()
 			if len(title):
 				pos = len(self.result) - 1
-				self.result[pos][0] += title
+				try:
+					self.result[pos][0] += title
+				except IndexError: pass					
+#~ if __name__ == "__main__":
+	#~ c = getchannels()
+	#~ for x in c.result:
+		#~ print 'ID: %s Name: %s' %  (x[1] , x[0])
