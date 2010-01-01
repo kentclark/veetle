@@ -110,9 +110,12 @@ class stunclient(udpclient, threading.Thread):
 			octet = octet + str(intip / ( 256 ** exp )) + "."
 			intip = intip % ( 256 ** exp )
 		return(octet.rstrip('.'))
-#~ if __name__ == "__main__":
-	#~ stunc = stunclient( (stunservers[0], 3478), 3388)
-	#~ stunc.start()
-	#~ stunc.finished.wait()
-	#~ print stunc.IPv4, stunc.port
-	#~ exit()
+def getIP():
+	for stund in stunservers:
+		stunc = stunclient( (stund, 3478), 33388)
+		stunc.start()
+		stunc.finished.wait()
+		ip = stunc.IPv4
+		if ip:
+			return ip
+	return ip
